@@ -1,0 +1,16 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+$color: #fcfcfc;
+
+body {
+    background-color: $color;
+
+    h1 {
+        font-weight: bold;
+        color: beige;
+    }
+}
