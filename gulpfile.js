@@ -5,7 +5,7 @@ var autoprefixer = require('gulp-autoprefixer'); // npm install --save-dev gulp-
 var sourcemaps = require('gulp-sourcemaps');
 
 function copy(done) {
-    gulp.src('./scss/style.scss')
+    gulp.src('./scss/**/*.scss')
       .pipe(sourcemaps.init())
       .pipe( sass({
         errorLogToConsole: true,
@@ -24,7 +24,20 @@ function copy(done) {
     done();
 } 
 
-gulp.task(copy)
+function print(done) {
+  console.log("Hello!")
+  done();
+}
+
+function watchSass() {
+  gulp.watch("./scss/**/*", copy);
+}
+
+// gulp.task(copy)
+// gulp.task(print)
+gulp.task('default', gulp.series(print, watchSass));
+
+
 
 // function defaultSomeTask(done) {
 //     console.log('all is working!');
