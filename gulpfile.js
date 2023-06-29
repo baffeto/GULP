@@ -3,6 +3,9 @@ var rename = require('gulp-rename');
 const sass = require('gulp-sass')(require('sass'));
 var autoprefixer = require('gulp-autoprefixer'); // npm install --save-dev gulp-autoprefixer
 var sourcemaps = require('gulp-sourcemaps');
+var browserSync = require('browser-sync');
+browserSync.create();
+
 
 function copy(done) {
     gulp.src('./scss/**/*.scss')
@@ -19,8 +22,9 @@ function copy(done) {
       .pipe( rename({suffix: '.min'}) )
       .pipe(sourcemaps.write('./'))
       // .pipe( rename('main.css') ) // npm install --save-dev gulp-rename
-      .pipe( gulp.dest('./css/') );
+      .pipe( gulp.dest('./css/') )
     //   .pipe();
+      .pipe(browserSync.stream());
     done();
 } 
 
@@ -35,9 +39,31 @@ function watchSass() {
 
 // gulp.task(copy)
 // gulp.task(print)
-gulp.task('default', gulp.series(print, watchSass));
+gulp.task('default', gulp.parallel(watchFiles, sync));
 
+function watchFiles() {
+  gulp.watch('./scss/**/*.scss', copy);
+  gulp.watch('./**/*.html', browserReload);
+  gulp.watch('./**/*.php', browserReload);
+  gulp.watch('./**/*.js', browserReload);
+}
 
+function browserReload(done) {
+  browserSync.reload();
+  done();
+}
+
+function sync(done) {
+  browserSync.init({
+    server: {
+      baseDir: "./"
+    },
+    port: 3000
+  });
+  done();
+}
+
+// gulp.task(sync);
 
 // function defaultSomeTask(done) {
 //     console.log('all is working!');
